@@ -31,6 +31,7 @@ const storage = multer.diskStorage({
 const uploadOptions = multer({ storage: storage });
 
 router.get(`/`, async (req, res) => {
+    //console.log("products")
     let filter = {};
     if (req.query.categories) {
         filter = { category: req.query.categories.split(',') };
@@ -38,9 +39,14 @@ router.get(`/`, async (req, res) => {
 
     const productList = await Product.find(filter).populate('category');
 
+    const allProduct = await Product.find();
+
     if (!productList) {
+        console.log("cannot find products")
         res.status(500).json({ success: false });
     }
+    //res.send("producs")
+    //console.log(allProduct)
     res.send(productList);
 });
 
