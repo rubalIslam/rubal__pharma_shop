@@ -1,12 +1,19 @@
-const express = require('express');
+//const express = require('express');
+import express from "express";
 const app = express();
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv/config');
-const authJwt = require('./helpers/jwt');
-const errorHandler = require('./helpers/error-handler');
-
+import morgan from "morgan";
+//const morgan = require('morgan');
+import mongoose from 'mongoose'
+//const mongoose = require('mongoose');
+import cors from "cors";
+//const cors = require('cors');
+//require('dotenv/config');
+import dotenv from "dotenv";
+import authJwt from "./helpers/jwt.js";
+//const authJwt = require('./helpers/jwt');
+import errorHandler from "./helpers/error-handler.js";
+//const errorHandler = require('./helpers/error-handler');
+dotenv.config();
 
 app.use(cors());
 app.options('*', cors())
@@ -15,21 +22,28 @@ app.options('*', cors())
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
-app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
+//app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 app.use(errorHandler);
 
 //Routes
-const categoriesRoutes = require('./routes/categories');
-const productsRoutes = require('./routes/products');
-const usersRoutes = require('./routes/users');
-const ordersRoutes = require('./routes/orders');
+//const categoriesRoutes = require('./routes/categories');
+//const productsRoutes = require('./routes/products');
+import productRoutes from './routes/productRoutes.js';
+//const usersRoutes = require('./routes/users');
+import userRoutes from './routes/userRoutes.js'
+//const ordersRoutes = require('./routes/orders');
+import orderRoutes from './routes/orderRoutes.js'
 
 const api = process.env.API_URL;
 
-app.use(`${api}/categories`, categoriesRoutes);
-app.use(`${api}/products`, productsRoutes);
-app.use(`${api}/users`, usersRoutes);
-app.use(`${api}/orders`, ordersRoutes);
+//app.use(`${api}/categories`, categoriesRoutes);
+//app.use(`${api}/products`, productsRoutes);
+app.use(`${api}/products`, productRoutes);
+//app.use(`${api}/users`, usersRoutes);
+app.use(`${api}/users`,userRoutes);
+app.use(`${api}/orders`,orderRoutes);
+//app.use(`${api}/orders`, ordersRoutes);
+
 
 //Database
 mongoose.connect(process.env.CONNECTION_STRING, {
